@@ -1,4 +1,3 @@
-latex-template
-==============
+Programmierpraktikum Bonusübung
+===============================
 
-A template for collaboratively creating LaTeX documents
