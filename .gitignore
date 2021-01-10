@@ -25,3 +25,4 @@
 *.fdb_latexmk
 *.fls
 _chapters.tex
+_minted-main/

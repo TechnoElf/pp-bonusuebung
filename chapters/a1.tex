@@ -1,14 +1,23 @@
 \documentclass{standalone}
 \begin{document}
 \section{Aufgabe 1}
-    Schreiben sie ein Programm, dass die Position der Planeten in unserem Sonnensystem berechnet.
+    Schreiben sie ein Programm, dass den Wurf eines Balls in einem zwei-dimensionalen Kartischem Koordinatensystem simuliert. Nehmen sie an, dass die Beschleunigung durch die Schwerkraft $g=9.81\text{ms}^-2$, die Startposition des Balls $\begin{bmatrix}x_0\\y_0\end{bmatrix}=\begin{bmatrix}0\text{m}\\0\text{m}\end{bmatrix}$ und ignorieren sie jegliche Reibungskräfte.
 
 \begin{enumerate}[a)]
 \item
-    Berechnen sie die Position der Erde relativ zur Sonne.
+    Berechnen sie mit einem Programm die Position des Balls zu einer bestimmten Zeit. Fragen sie dafür den Nutzer nach einem Geschwindigkeitsvektor $\begin{bmatrix}v_{x0}\\v_{y0}\end{bmatrix}$ für den Ball und einer Zeit. Lesen sie diese Werte mit \mintinline{C}{scanf} als \mintinline{C}{double} ein. Verwenden sie zur Berechnung die Gesetze der Kinematik.
+    \begin{align*}
+        x(t)=x_0+v_0t+\frac{at^2}{2}
+    \end{align*}
 
 \item
-    Schreiben sie eine Funktion, die Anhand der nötigen Parameter die Position eines beliebigen Planeten errechnet.
+    Schreiben sie ihr Programm um indem sie ein \mintinline{C}{struct} nutzen um zwei-dimensionale Vektoren sinnvoll darzustellen.
+
+\item
+    Berechnen sie den höchsten Punkt, den der Ball für einen vom Nutzer eingegebenen Geschwindigkeitsvektor erreicht. Tipp: Am höchsten Punkt der Parabel ist die vertikale Geschwindigkeit des Balls gleich Null.
+
+\item
+    Schreiben sie ein Ball-Wurf-Spiel. Das Ziel des Spiels ist es einen Geschwindigkeitsvektor einzugeben, der dafür sorgt, dass der Ball in einem bestimmten Bereich landet. Dazu sollten sie den Punkt an dem der Ball auf der x-Achse aufkommt berechnen. Teilen sie dann dem Spieler mit, ob das Ziel getroffen wurde oder nicht. Den Zielbereich können sie in ihrem Programm beliebig wählen (beispielsweise das Intervall $]9.5,10.5[$).
 
 \end{enumerate}
 \end{document}
