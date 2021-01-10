@@ -1,0 +1,33 @@
+name: Build Master
+    
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install build environment
+        run: |
+          sudo apt-get install texlive texlive-latex-recommended texlive-latex-extra texlive-bibtex-extra latexmk biber python3-setuptools
+          python3 -m pip install -U discord.py
+      - name: Set up build
+        run: |
+          ls chapters/*.tex | awk '{printf "\\input{%s}\n", $1}' > _chapters.tex
+      - name: Build document
+        run: |
+          latexmk -pdf -file-line-error -halt-on-error -interaction=nonstopmode main.tex
+      - name: Upload to GitHub
+        uses: actions/upload-artifact@v2
+        with:
+          name: main
+          path: main.pdf
+      - name: Upload to Discord
+        continue-on-error: true
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_GUILD: ${{ secrets.DISCORD_GUILD }}
+        run: |
+          python3 .github/workflows/upload-discord.py
