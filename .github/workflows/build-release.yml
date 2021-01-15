@@ -27,7 +27,7 @@ jobs:
           ls chapters/*.tex | awk '{printf "\\input{%s}\n", $1}' > _chapters.tex
       - name: Build document
         run: |
-          latexmki -shell-escape -pdf -file-line-error -halt-on-error -interaction=nonstopmode main.tex
+          latexmk -shell-escape -pdf -file-line-error -halt-on-error -interaction=nonstopmode main.tex
       - uses: actions/upload-artifact@v2
         with:
           name: main
