@@ -29,6 +29,7 @@ int main(void) {
 */
 
 // Aufgabe 3 b)
+/*
 int main(void) {
     const double w = 0.0000004;
     const double l = 0.00000025;
@@ -55,6 +56,37 @@ int main(void) {
             printf("Der Transistor ist im linearen Bereich\n");
             printf("u_ds = %lf\n", u_ds_lin);
         }
+    }
+}
+*/
+
+// Aufgabe 3 c)
+int main(void) {
+    const double u_gs = 2.0;
+    const double u_ds = 0.55;
+    const double w = 0.0000004;
+    const double l = 0.00000025;
+    const double u_t = 0.4;
+    const double k = 0.000128;
+
+    const double beta = k * w / l;
+
+    if (u_gs < u_t && 0.0 < u_ds) {
+        printf("Der Transistor ist im Sperrbereich\n");
+        printf("i_d = 0\n");
+    } else if (u_gs > u_t && 0.0 < u_ds && u_ds < u_gs - u_t) {
+        const double i_d = beta * (u_gs - u_t - (u_ds / 2.0)) * u_ds;
+
+        printf("Der Transistor ist im linearen Bereich\n");
+        printf("i_d = %lf\n", i_d);
+    } else if (u_gs > u_t && u_ds > u_gs - u_t) {
+        const double i_d = (beta / 2.0) * (u_gs - u_t) * (u_gs - u_t);
+
+        printf("Der Transistor ist im Sättigungsbereich\n");
+        printf("i_d = %lf\n", i_d);
+    } else {
+        printf("Der Transistor bricht die Gesetze der Physik\n");
+        printf("i_d = ???\n");
     }
 }
 
