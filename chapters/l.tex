@@ -1,0 +1,302 @@
+\documentclass{standalone}
+\begin{document}
+\newpage
+\section{Lösungsvorschläge}
+\subsection{Aufgabe 1}
+\begin{enumerate}[a)]
+\item
+    \begin{minted}{c}
+int main(void) {
+    double initial_v_x = 0.0;
+    printf("Geben sie die horizontale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v_x);
+
+    double initial_v_y = 0.0;
+    printf("Geben sie die vertikale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v_y);
+
+    double t = 0.0;
+    printf("Geben sie eine Zeit an\n");
+    scanf(" %lf", &t);
+
+    double pos_x = initial_v_x * t;
+    double pos_y = initial_v_y * t + (-9.81 / 2.0) * t * t;
+
+    printf("Position des Objekts: (%.2lf, %.2lf)\n", pos_x, pos_y);
+}
+    \end{minted}
+
+\item
+    \begin{minted}{c}
+struct Vec2 {
+    double x;
+    double y;
+};
+
+int main(void) {
+    struct Vec2 initial_v = { 0.0, 0.0 };
+    printf("Geben sie die horizontale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v.x);
+    printf("Geben sie die vertikale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v.y);
+
+    double t = 0.0;
+    printf("Geben sie eine Zeit an\n");
+    scanf(" %lf", &t);
+
+    struct Vec2 pos = {
+        initial_v.x * t,
+        initial_v.y * t + (-9.81 / 2.0) * t * t
+    };
+
+    printf("Position des Objekts: (%.2lf, %.2lf)\n", pos.x, pos.y);
+}
+    \end{minted}
+
+\item
+    \begin{minted}{c}
+struct Vec2 {
+    double x;
+    double y;
+};
+
+int main(void) {
+    struct Vec2 initial_v = { 0.0, 0.0 };
+    printf("Geben sie die horizontale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v.x);
+    printf("Geben sie die vertikale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v.y);
+
+    // initial_v.y + (-9.81) * t = 0
+    double t = initial_v.y / 9.81;
+
+    struct Vec2 pos = {
+        initial_v.x * t,
+        initial_v.y * t + (-9.81 / 2.0) * t * t
+    };
+
+    printf("Höchster Punkt: (%.2lf, %.2lf)\n", pos.x, pos.y);
+}
+    \end{minted}
+
+\item
+    \begin{minted}{c}
+struct Vec2 {
+    double x;
+    double y;
+};
+
+int main(void) {
+    struct Vec2 initial_v = { 0.0, 0.0 };
+    printf("Geben sie die horizontale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v.x);
+    printf("Geben sie die vertikale Startgeschwindigkeit an\n");
+    scanf(" %lf", &initial_v.y);
+
+    // initial_v.y * t + (-9.81 / 2.0) * t * t = 0
+    double t = 2.0 * initial_v.y / 9.81;
+
+    struct Vec2 pos = {
+        initial_v.x * t,
+        initial_v.y * t + (-9.81 / 2.0) * t * t
+    };
+
+    if (9.5 < pos.x && pos.x < 10.5) {
+        printf("Treffer!\n");
+    } else {
+        printf("Verfehlt.\n");
+    }
+}
+    \end{minted}
+
+\end{enumerate}
+\subsection{Aufgabe 2}
+\begin{enumerate}[a)]
+\item
+    \begin{minted}{c}
+int main(void) {
+    char text[101] = { 0 };
+    printf("Verschlüsselten Text eingeben\n");
+    scanf(" %100s", text); // besser wäre "fgets(text, 100, stdin)", da scanf keine Leerzeichen erlaubt
+
+    int key = 0;
+    printf("Schlüssel eingeben\n");
+    scanf(" %i", &key);
+
+    for (int i = 0; text[i] != 0; i++) {
+        char enc = text[i];
+        if (0x41 <= enc && enc <= 0x5A) { // Großbuchstaben
+            if (enc - key < 0x41) { // Underflow
+                text[i] = enc - key + 26;
+            } else if (enc - key > 0x5A) { // Overflow
+                text[i] = enc - key - 26;
+            }  else {
+                text[i] = enc - key;
+            }
+        } else if (0x61 <= enc && enc <= 0x7A) { // Kleinbuchstaben
+            if (enc - key < 0x61) { // Underflow
+                text[i] = enc - key + 26;
+            } else if (enc - key > 0x7A) { // Overflow
+                text[i] = enc - key - 26;
+            } else {
+                text[i] = enc - key;
+            }
+        }
+    }
+
+    printf("Entschlüsselter Text: %s\n", text);
+}
+    \end{minted}
+
+\item
+    \begin{minted}{c}
+int main(void) {
+    int mode = 0;
+    while (!(mode == 1 || mode == 2)) {
+        printf("Modus auswählen\n");
+        printf("\t1: Entschlüsseln\n");
+        printf("\t2: Verschlüsseln\n");
+        scanf(" %i", &mode);
+    }
+
+    char text[101] = { 0 };
+    if (mode == 1) {
+        printf("Verschlüsselten Text eingeben\n");
+    } else {
+        printf("Zu verschlüsselnden Text eingeben\n");
+    }
+    scanf(" %100s", text);
+
+    int key = 0;
+    printf("Schlüssel eingeben\n");
+    scanf(" %i", &key);
+
+    if (mode == 2) {
+        key = -key;
+    }
+
+    for (int i = 0; text[i] != 0; i++) {
+        char enc = text[i];
+        if (0x41 <= enc && enc <= 0x5A) {
+            if (enc - key < 0x41) {
+                text[i] = enc - key + 26;
+            } else if (enc - key > 0x5A) {
+                text[i] = enc - key - 26;
+            }  else {
+                text[i] = enc - key;
+            }
+        } else if (0x61 <= enc && enc <= 0x7A) {
+            if (enc - key < 0x61) {
+                text[i] = enc - key + 26;
+            } else if (enc - key > 0x7A) {
+                text[i] = enc - key - 26;
+            } else {
+                text[i] = enc - key;
+            }
+        }
+    }
+
+    if (mode == 1) {
+        printf("Entschlüsselter Text: %s\n", text);
+    } else {
+        printf("Verschlüsselter Text: %s\n", text);
+    }
+}
+    \end{minted}
+
+\end{enumerate}
+\subsection{Aufgabe 3}
+\begin{enumerate}[a)]
+\item
+    \begin{minted}{c}
+int main(void) {
+    const double w = 0.0000004;
+    const double l = 0.00000025;
+    const double u_gs = 2.0;
+    const double i_d = 0.00015;
+    const double u_t = 0.4;
+    const double k = 0.000128;
+
+    const double epsilon = 1e-5;
+
+    if (u_gs < u_t) {
+        printf("Der Transistor ist im Sperrbereich\n");
+    } else {
+        const double beta = k * w / l;
+        const double i_d_sat = (beta / 2.0) * (u_gs - u_t) * (u_gs - u_t); // Sah-Modellgleichung
+
+        if (i_d - epsilon <= i_d_sat && i_d_sat <= i_d + epsilon) { // Nicht "i_d == i_d_sat"!
+            printf("Der Transistor ist im Sättigungsbereich\n");
+        } else {
+            printf("Der Transistor ist im linearen Bereich\n");
+        }
+    }
+}
+    \end{minted}
+
+\item
+    \begin{minted}{c}
+int main(void) {
+    const double w = 0.0000004;
+    const double l = 0.00000025;
+    const double u_gs = 2.0;
+    const double i_d = 0.00015;
+    const double u_t = 0.4;
+    const double k = 0.000128;
+
+    const double epsilon = 1e-5;
+
+    if (u_gs < u_t) {
+        printf("Der Transistor ist im Sperrbereich\n");
+        printf("u_ds >= 0\n");
+    } else {
+        const double beta = k * w / l;
+        const double i_d_sat = (beta / 2.0) * (u_gs - u_t) * (u_gs - u_t);
+
+        if (i_d - epsilon <= i_d_sat && i_d_sat <= i_d + epsilon) {
+            printf("Der Transistor ist im Sättigungsbereich\n");
+            printf("u_ds >= %lf\n", u_gs - u_t);
+        } else {
+            const double u_ds_lin = (-(2.0 * (u_t - u_gs)) - sqrt((2.0 * (u_t - u_gs)) * (2.0 * (u_t - u_gs)) - (4.0 * (2.0 * i_d / beta)))) / 2.0; // Sah-Modellgleichung
+
+            printf("Der Transistor ist im linearen Bereich\n");
+            printf("u_ds = %lf\n", u_ds_lin);
+        }
+    }
+}
+    \end{minted}
+
+\item
+    \begin{minted}{c}
+int main(void) {
+    const double u_gs = 2.0;
+    const double u_ds = 0.55;
+    const double w = 0.0000004;
+    const double l = 0.00000025;
+    const double u_t = 0.4;
+    const double k = 0.000128;
+
+    const double beta = k * w / l;
+
+    if (u_gs < u_t && 0.0 < u_ds) {
+        printf("Der Transistor ist im Sperrbereich\n");
+        printf("i_d = 0\n");
+    } else if (u_gs > u_t && 0.0 < u_ds && u_ds < u_gs - u_t) {
+        const double i_d = beta * (u_gs - u_t - (u_ds / 2.0)) * u_ds;
+
+        printf("Der Transistor ist im linearen Bereich\n");
+        printf("i_d = %lf\n", i_d);
+    } else if (u_gs > u_t && u_ds > u_gs - u_t) {
+        const double i_d = (beta / 2.0) * (u_gs - u_t) * (u_gs - u_t);
+
+        printf("Der Transistor ist im Sättigungsbereich\n");
+        printf("i_d = %lf\n", i_d);
+    } else {
+        printf("Der Transistor bricht die Gesetze der Physik\n");
+        printf("i_d = ???\n");
+    }
+}
+    \end{minted}
+
+\end{enumerate}
+\end{document}
